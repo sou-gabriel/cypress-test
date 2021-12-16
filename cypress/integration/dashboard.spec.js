@@ -63,4 +63,29 @@ describe('Criar uma aposta da Mega-Sena', () => {
     cy.get('.sc-cidDSM').click()
     cy.get('.go2072408551').should('include.text', 'Aposta deletada com sucesso do carrinho!')
   })
+
+  it('Salvar uma quantidade válida de jogos da Mega-Sena que estão no carrinho deve funcionar', () => {
+    for (let i = 0; i < 15; i++) {
+      cy.get(':nth-child(7) > .sc-cNKqjZ > :nth-child(1)').click()
+      cy.get('.grualo').click()
+    }
+
+    cy.intercept({
+      method: 'POST',
+      url: `${Cypress.env('endpoint')}/bet/new-bet`
+    }).as('saveBet')
+
+    cy.get('.sc-ksdxgE').click()
+
+    cy.wait('@saveBet').then(request => {
+      expect(request.response.statusCode).to.be.eq(200)
+    })
+  })
+
+  it('Salvar uma quantia inválida de jogos da Mega-Sena que estão no carrinho não deve funcionar', () => {
+    cy.get(':nth-child(7) > .sc-cNKqjZ > :nth-child(1)').click()
+    cy.get('.grualo').click()
+    cy.get('.sc-ksdxgE').click()
+    cy.get('.go2072408551').should('be.visible')
+  })
 })
