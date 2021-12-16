@@ -24,18 +24,20 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-// Cypress.Commands.add('loginUser', () => {
-//   cy.request({
-//     url: 'http://127.0.0.1:3333/login',
-//     method: 'POST',
-//     body: {
-//       email: 'manoel@luby.com.br',
-//       password: 'secret'
-//     }
-//   }).then(response => {
-//     expect(response.body.token.token).is.not.null
-//     cy.log(response.body.token.token)
+Cypress.Commands.add('token', () => {
+  cy.request({
+    method: 'POST',
+    url: `${Cypress.env('endpoint')}/login`,
+    body: {
+      email: 'dev.gabrielramos@gmail.com',
+      password: '123456'
+    }
+  })
+})
 
-//     Cypress.env('userToken', response.body.token.token)
-//   })
-// })
+Cypress.Commands.add('login', () => {
+  cy.token().then(response => {
+    const { token } = response.body.token 
+    localStorage.setItem('token', token)
+  })
+})
