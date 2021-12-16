@@ -29,8 +29,8 @@ Cypress.Commands.add('token', () => {
     method: 'POST',
     url: `${Cypress.env('endpoint')}/login`,
     body: {
-      email: 'dev.gabrielramos@gmail.com',
-      password: '123456'
+      email: 'manoel@luby.com.br',
+      password: 'secret'
     }
   })
 })
